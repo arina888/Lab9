@@ -1,10 +1,10 @@
-﻿//Вариант 10
+﻿//Вариант 9
+//Проверить уникальность записей по свойству Email.
+//Найти средний возраст покупателей.
+//Отсортировать заказы по Id.
+//Переместить заказы, где Price меньше 60000, в отдельный список.
+//Сгенерировать новые случайные записи и добавить их в список, учитывая следующие условия: свойство Id должно быть итеративным, свойства ProductId, CustomerId, Phone, Email должны быть уникальными.
 
-//1.Проверить уникальность записей по свойству Name.*
-//2.Найти покупателя с наименьшим возрастом.*
-//3.Отсортировать заказы по City.*
-//4.Переместить заказы, где Tag имеет значение "Компьютер", в отдельный список.*
-//5.Сгенерировать новые случайные записи и добавить их в список, учитывая следующие условия: свойство Id должно быть итеративным, свойства ProductId, CustomerId, Phone, Email должны быть уникальными.
 
 using System.Text;
 using System.Text.Encodings;
@@ -48,7 +48,7 @@ for (int i = 1; i < lines.Length; i++)
 Console.WriteLine("Задание 1");
 Console.WriteLine();
 
-List<string> listName = new List<string>();
+List<string> listemails = new List<string>();
 using (var reader = new StreamReader(path, encoding))
 {
     while (!reader.EndOfStream)
@@ -56,12 +56,12 @@ using (var reader = new StreamReader(path, encoding))
         var line = reader.ReadLine();
         var values = line.Split(';');
 
-        listName.Add(values[0]);
+        listemails.Add(values[0]);
 
     }
 }
 
-bool answ = listName.SequenceEqual(listName.Take(listName.Count()));
+bool answ = listemails.SequenceEqual(listemails.Take(listemails.Count()));
 if (answ)
 {
     Console.WriteLine("Записи по свойству Name уникальны");
@@ -78,17 +78,10 @@ Console.WriteLine();
 Console.WriteLine("Задание 2");
 Console.WriteLine();
 
-var min = datas.Min(x => x.Age);
+var avg = datas.Average(x => x.Age);
+Console.WriteLine("Средний возраст покупателей:\n");
+Console.WriteLine(avg);
 
-var personminage = from p in datas
-                     where p.Age == min
-                     select p;
-
-Console.WriteLine("Покупатель с наименьшим возрастом:\n");
-foreach (var z in personminage)
-{
-    Console.WriteLine(z);
-}
 
 Console.WriteLine();
 
@@ -98,11 +91,11 @@ Console.WriteLine();
 //Console.WriteLine();
 
 var sorteddata = from p in datas
-                    orderby p.City
+                    orderby p.Id
                     select p;
 
 
-var result0 = "resultwithsortedcity.csv";
+var result0 = "resultwithsortedid.csv";
 
 
 using (StreamWriter streamWriter = new StreamWriter(result0, false, encoding))
@@ -123,21 +116,20 @@ using (StreamWriter streamWriter = new StreamWriter(result0, false, encoding))
 //Console.WriteLine();
 
 
-var selecteddatawithcomp = from i in datas
-                           where i.Tag == "Компьютер"
+var selecteddatawithprice = from i in datas
+                           where i.Price < 60000
                            select i;
 
-var result = "resultwithcomputer.csv";
+var result = "resultwithprice.csv";
 
 using (StreamWriter streamWriter = new StreamWriter(result, false, encoding))
 {
 streamWriter.WriteLine($"Id;Email;Phone;Age;City;Street;Tag;Price;CustomerId;ProductId");
 
-        foreach (var x in selecteddatawithcomp)
+        foreach (var x in selecteddatawithprice)
         {
             streamWriter.WriteLine(x.ToExcel());
         }
-       
     
 }
 
