@@ -71,6 +71,7 @@ else
     Console.WriteLine("Записи по свойству Name не уникальны");
 }
 
+Console.WriteLine();
 
 // 2 задание
 
@@ -78,37 +79,67 @@ Console.WriteLine("Задание 2");
 Console.WriteLine();
 
 var min = datas.Min(x => x.Age);
-Console.WriteLine(min);
 
+var personminage = from p in datas
+                     where p.Age == min
+                     select p;
+
+Console.WriteLine("Покупатель с наименьшим возрастом:\n");
+foreach (var z in personminage)
+{
+    Console.WriteLine(z);
+}
+
+Console.WriteLine();
 
 // 3 задание
 
-Console.WriteLine("Задание 3");
-Console.WriteLine();
+//Console.WriteLine("Задание 3");
+//Console.WriteLine();
 
 var sorteddata = from p in datas
                     orderby p.City
                     select p;
 
-foreach (var p in sorteddata)
-{ 
-    Console.WriteLine(p);
+
+var result0 = "resultwithsortedcity.csv";
+
+
+using (StreamWriter streamWriter = new StreamWriter(result0, false, encoding))
+{
+    streamWriter.WriteLine($"Id;Email;Phone;Age;City;Street;Tag;Price;CustomerId;ProductId");
+
+    foreach (var g in sorteddata)
+    {
+        streamWriter.WriteLine(g.ToExcel());
+    }
+
+
 }
 
 // 4 задание
 
-Console.WriteLine("Задание 4");
-Console.WriteLine();
+//Console.WriteLine("Задание 4");
+//Console.WriteLine();
 
 
 var selecteddatawithcomp = from i in datas
                            where i.Tag == "Компьютер"
                            select i;
-foreach (var x in selecteddatawithcomp)
+
+var result = "resultwithcomputer.csv";
+
+using (StreamWriter streamWriter = new StreamWriter(result, false, encoding))
 {
-    Console.WriteLine(x);
+streamWriter.WriteLine($"Id;Email;Phone;Age;City;Street;Tag;Price;CustomerId;ProductId");
+
+        foreach (var x in selecteddatawithcomp)
+        {
+            streamWriter.WriteLine(x.ToExcel());
+        }
+       
+    
 }
-Console.WriteLine();
 
 // 5 задание
 
